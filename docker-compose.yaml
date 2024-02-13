@@ -10,7 +10,9 @@ services:
         "run",
         "postman-api.json",
         "--reporters",
-        "cli,htmlextra",
+        "cli,junit,htmlextra",
         "--reporter-htmlextra-export",
         "/etc/report/report.html",
+        "--reporter-junit-export",
+        "/etc/report/junit.xml" 
       ]
