@@ -34,3 +34,8 @@ jobs:
         with:
           name: test-report
           path: report
+      - name: Publish test report
+        if: success() || failure()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: 'report\junit.xml'
