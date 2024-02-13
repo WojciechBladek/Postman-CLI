@@ -1,7 +1,15 @@
 version: "3.8"
 services:
   postman:
-    image: postman/newman
+    image: pstauffer/newman-htmlextra
     volumes:
       - ./collection:/etc/newman
-    command: ["run", "postman-api.json"]
+    command:
+      [
+        "run",
+        "postman-api.json",
+        "--reporters",
+        "cli,htmlextra",
+        "--reporter-htmlextra-export",
+        "/etc/newman/report.html",
+      ]
