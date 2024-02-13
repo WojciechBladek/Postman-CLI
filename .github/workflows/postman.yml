@@ -6,6 +6,11 @@ on:
       - main
   pull_request:
     branches: main
+    
+permissions:
+  contents: read
+  checks: write
+  id-token: write
 
 jobs:
   test:
@@ -21,7 +26,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Run Docker
         run: npm run docker\:start
@@ -30,7 +35,7 @@ jobs:
         run: npm run docker:run-tests
 
       - name: Save Test Report Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: test-report
           path: report
