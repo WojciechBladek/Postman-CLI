@@ -4,6 +4,7 @@ services:
     image: pstauffer/newman-htmlextra
     volumes:
       - ./collection:/etc/newman
+      - ./report:/etc/report
     command:
       [
         "run",
@@ -11,5 +12,5 @@ services:
         "--reporters",
         "cli,htmlextra",
         "--reporter-htmlextra-export",
-        "/etc/newman/report.html",
+        "/etc/report/report.html",
       ]
