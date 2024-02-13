@@ -43,4 +43,4 @@ jobs:
         if: success() || failure()
         uses: mikepenz/action-junit-report@v4
         with:
-          report_paths: 'report\junit.xml'
+          report_paths: './report/junit.xml'
