@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+  postman:
+    image: postman/newman
+    volumes:
+      - ./collection:/etc/newman
+    command: ["run", "postman-api.json"]

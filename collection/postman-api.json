@@ -1,0 +1,123 @@
+{
+	"info": {
+		"_postman_id": "66732daf-c778-4d69-a029-5179d1bc18cd",
+		"name": "jsonPlaceHolder",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "19343797"
+	},
+	"item": [
+		{
+			"name": "Get Posts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"pm.test(\"Status code is 200\",  () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains 100 posts\",  () => {\r",
+							"    pm.expect(jsonData.length).to.eql(100);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Posts have required fields\",  () => {\r",
+							"    jsonData.forEach((post) => {\r",
+							"        pm.expect(post).to.have.property('userId');\r",
+							"        pm.expect(post).to.have.property('id');\r",
+							"        pm.expect(post).to.have.property('title');\r",
+							"        pm.expect(post).to.have.property('body');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Post IDs are unique\",  () => {\r",
+							"    const postIds = jsonData.map((post) => {\r",
+							"        return post.id;\r",
+							"    });\r",
+							"    pm.expect(postIds).to.have.lengthOf(new Set(postIds).size);\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "https://jsonplaceholder.typicode.com/posts"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"    const expectedPostDataString = pm.environment.get('expectedPostData');\r",
+							"    const expectedPostData = JSON.parse(expectedPostDataString);\r",
+							"\r",
+							"pm.test(\"Verify response for new post added from Postman\", () => {\r",
+							"    pm.response.to.have.status(201);\r",
+							"    pm.expect(jsonData).to.deep.include(expectedPostData);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check data types for the post\", () => {\r",
+							"    pm.expect(jsonData.userId).to.be.a('number');\r",
+							"    pm.expect(jsonData.title).to.be.a('string');\r",
+							"    pm.expect(jsonData.body).to.be.a('string');\r",
+							"    pm.expect(jsonData.id).to.be.a('number');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const expectedPostData = {\r",
+							"    userId: 1,\r",
+							"    title: \"New Post\",\r",
+							"    body: \"This is a new post added via Postman.\"\r",
+							"};\r",
+							"\r",
+							"pm.environment.set(\"expectedPostData\", JSON.stringify(expectedPostData));\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{expectedPostData}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://jsonplaceholder.typicode.com/posts"
+			},
+			"response": []
+		}
+	]
+}
