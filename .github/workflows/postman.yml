@@ -1,0 +1,46 @@
+name: Postman Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: main
+    
+permissions:
+  contents: read
+  checks: write
+  id-token: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postman:
+        image: pstauffer/newman-htmlextra
+        volumes:
+          - ./collection:/etc/newman
+          - ./report:/etc/report
+        options: --name=postman
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Run Docker
+        run: npm run docker\:start
+
+      - name: Run Postman Tests
+        run: npm run docker:run-tests
+
+      - name: Save Test Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: report
+      - name: Publish test report
+        if: success() || failure()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: './report/junit.xml'

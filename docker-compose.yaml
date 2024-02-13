@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  postman:
+    image: pstauffer/newman-htmlextra
+    volumes:
+      - ./collection:/etc/newman
+      - ./report:/etc/report
+    command:
+      [
+        "run",
+        "postman-api.json",
+        "--reporters",
+        "cli,junit,htmlextra",
+        "--reporter-htmlextra-export",
+        "/etc/report/report.html",
+        "--reporter-junit-export",
+        "/etc/report/junit.xml" 
+      ]
